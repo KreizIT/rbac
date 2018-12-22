@@ -141,12 +141,12 @@ class RbacManagerTest extends \RbacSetup
     public function testManagerCheckPath()
     {
         self::$rbac->Permissions->addPath('/permissions_1/permissions_2/permissions_3');
-        $perm_id_1 = self::$rbac->Permissions->pathId('/permissions_1/permissions_2/permissions_3');
+        $perm_id_1 = self::$rbac->Permissions->pathId('/permissions_1/permissions_2');
 
         self::$rbac->Roles->addPath('/roles_1/roles_2/roles_3');
         $role_id_1 = self::$rbac->Roles->pathId('/roles_1/roles_2/roles_3');
 
-        self::$rbac->Roles->assign($role_id_1, 3);
+        self::$rbac->Roles->assign($role_id_1, $perm_id_1);
         self::$rbac->Users->assign($role_id_1, 5);
 
         $result = self::$rbac->check('/permissions_1/permissions_2', 5);
@@ -222,12 +222,12 @@ class RbacManagerTest extends \RbacSetup
     public function testManagerEnforcePath()
     {
         self::$rbac->Permissions->addPath('/permissions_1/permissions_2/permissions_3');
-        $perm_id_1 = self::$rbac->Permissions->pathId('/permissions_1/permissions_2/permissions_3');
+        $perm_id_1 = self::$rbac->Permissions->pathId('/permissions_1/permissions_2');
 
         self::$rbac->Roles->addPath('/roles_1/roles_2/roles_3');
         $role_id_1 = self::$rbac->Roles->pathId('/roles_1/roles_2/roles_3');
 
-        self::$rbac->Roles->assign($role_id_1, 3);
+        self::$rbac->Roles->assign($role_id_1, $perm_id_1);
         self::$rbac->Users->assign($role_id_1, 5);
 
         $result = self::$rbac->enforce('/permissions_1/permissions_2', 5);
