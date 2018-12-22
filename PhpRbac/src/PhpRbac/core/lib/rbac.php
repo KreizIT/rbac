@@ -569,12 +569,15 @@ class RbacManager extends JModel
      *        	containing a number)
      * @param string|integer $UserID
      *        	User ID of a user
+     * @param bool $Recurse
+     *          Use when $Permission is a path, allow system to recursively 
+     *          find permission
      *
      * @throws RbacPermissionNotFoundException
      * @throws RbacUserNotProvidedException
      * @return boolean
      */
-    function check($Permission, $UserID = null)
+    function check($Permission, $UserID = null, $Recurse = false)
     {
         if ($UserID === null)
             throw new \RbacUserNotProvidedException ("\$UserID is a required argument.");
@@ -586,10 +589,15 @@ class RbacManager extends JModel
         }
         else
         {
-            if (substr ( $Permission, 0, 1 ) == "/")
+            if (substr ( $Permission, 0, 1 ) == "/") {
                 $PermissionID = $this->Permissions->pathId ( $Permission );
-            else
+                if ($PermissionID === null && $Recurse) {
+                    $newPath = implode('/', explode('/', $Permission, -1));
+                    return $this->check($newPath, $UserID, true);
+                }
+            } else {
                 $PermissionID = $this->Permissions->titleId ( $Permission );
+            }
         }
 
         // if invalid, throw exception

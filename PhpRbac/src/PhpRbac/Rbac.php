@@ -33,9 +33,9 @@ class Rbac
         return Jf::$Rbac->assign($role, $permission);
     }
 
-    public function check($permission, $user_id)
+    public function check($permission, $user_id, $recurse = false)
     {
-        return Jf::$Rbac->check($permission, $user_id);
+        return Jf::$Rbac->check($permission, $user_id, $recurse);
     }
 
     public function enforce($permission, $user_id)
