@@ -644,14 +644,18 @@ class RbacManager extends JModel
     *
     * @param integer $UserID
     *
+    * @param bool $Recurse
+    *          Use when $Permission is a path, allow system to recursively 
+    *          find permission
+    *
     * @throws RbacUserNotProvidedException
     */
-	function enforce($Permission, $UserID = null)
+	function enforce($Permission, $UserID = null, $Recurse = false)
 	{
 	if ($UserID === null)
                 throw new \RbacUserNotProvidedException ("\$UserID is a required argument.");
 
-		if (! $this->check($Permission, $UserID)) {
+		if (! $this->check($Permission, $UserID, $Recurse)) {
             header('HTTP/1.1 403 Forbidden');
             die("<strong>Forbidden</strong>: You do not have permission to access this resource.");
         }
